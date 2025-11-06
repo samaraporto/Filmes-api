@@ -1,4 +1,4 @@
-name: Workflow - Commit
+name: Commit
 
 on:
   push:
