@@ -13,9 +13,6 @@ jobs:
       - name: Checkout do código
         uses: actions/checkout@v4
 
-      - name: Trocar para a branch do PR
-        run: git checkout ${{ github.head_ref }}
-
       - name: Instalar Node.js
         uses: actions/setup-node@v4
         with:
