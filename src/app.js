@@ -1,35 +1,38 @@
 const express = require('express')
 const app = express()
+const connectDB = require('./db/conexao');
+const Filme = require('./model/Filme');
 
 app.use(express.json())
 
-let filmes = [
-  { id: 1, titulo: 'Interestelar', diretor: 'Francis Ford Coppola', ano: 1972 },
-  { id: 2, titulo: 'A Origem', diretor: 'Quentin Tarantino', ano: 1994 }
-];
+connectDB();
 
-app.get('/api/filmes', (req,res)=>{
-    res.json(filmes)
-})
+app.get('/api/filmes', async (req, res) => {
+  try {
+    const filmes = await Filme.find();
+    res.json(filmes);
+  } catch (error) {
+    res.status(500).json({ error: 'Erro ao buscar filmes' });
+  }
+});
 
-app.post('/api/filmes', (req,res)=>{
-    const {titulo, diretor, ano} = req.body
+app.post('/api/filmes', async (req, res) => {
+  try {
+    const { titulo, diretor, ano } = req.body;
 
-    if(!titulo || !diretor || !ano){
-        return res.status(400).json({
-            error: 'Titulo, diretor e ano são obrigatorios'
-        })
+    if (!titulo || !diretor || !ano) {
+      return res.status(400).json({
+        error: 'Título, diretor e ano são obrigatórios'
+      });
     }
 
-    const novoFilme = {
-        id: filmes.length + 1,
-        titulo,
-        diretor,
-        ano
-    };
+    const novoFilme = new Filme({ titulo, diretor, ano });
+    await novoFilme.save();
 
-    filmes.push(novoFilme)
-    res.status(201).json(novoFilme)
-})
+    res.status(201).json(novoFilme);
+  } catch (error) {
+    res.status(500).json({ error: 'Erro ao adicionar filme' });
+  }
+});
 
 module.exports = app
