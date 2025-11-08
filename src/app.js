@@ -24,11 +24,6 @@ function salvarFilmes(filmes) {
   }
 }
 
-let filmes = [
-  { id: 1, titulo: 'Interestelar', diretor: 'Francis Ford Coppola', ano: 1972 },
-  { id: 2, titulo: 'A Origem', diretor: 'Quentin Tarantino', ano: 1994 }
-];
-
 app.get('/api/filmes', (req, res) => {
   const filmes = carregarFilmes();
   res.json(filmes);
@@ -56,6 +51,27 @@ app.post('/api/filmes', (req, res) => {
   salvarFilmes(filmes);
 
   res.status(201).json(novoFilme);
+});
+
+app.delete('/api/filmes/:id', (req, res) => {
+  const idParaDeletar = parseInt(req.params.id, 10);
+
+  if (isNaN(idParaDeletar)) {
+    return res.status(400).json({ error: 'ID inválido. Forneça um número.' });
+  }
+
+  let filmes = carregarFilmes();
+
+  const filmeIndex = filmes.findIndex(f => f.id === idParaDeletar);
+
+  if (filmeIndex === -1) {
+    return res.status(404).json({ error: 'Filme não encontrado' });
+  }
+
+  filmes.splice(filmeIndex, 1);
+  salvarFilmes(filmes);
+
+  return res.status(204).send();
 });
 
 module.exports = app

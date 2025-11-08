@@ -1,4 +1,20 @@
 [
-  { "id": 1, "titulo": "Interestelar", "diretor": "Christopher Nolan", "ano": 2014 },
-  { "id": 2, "titulo": "A Origem", "diretor": "Christopher Nolan", "ano": 2010 }
+     {
+    "id": 1,
+    "titulo": "Interestelar",
+    "diretor": "Christopher Nolan",
+    "ano": 2010
+  },
+  {
+    "id": 2,
+    "titulo": "A Origem",
+    "diretor": "Christopher Nolan",
+    "ano": 2010
+  },
+  {
+    "id": 3,
+    "titulo": "A matrix",
+    "diretor": "Christopher Nolan",
+    "ano": 2020
+  }
 ]
