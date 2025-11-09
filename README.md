@@ -5,30 +5,35 @@ O projeto inclui um **workflow de CI/CD (GitHub Actions)** que força a **verifi
 
 ---
 
-## 🚀 Funcionalidades Implementadas
+Uma **API REST simples** para gerenciar um catálogo de filmes, criada como **atividade acadêmica**.  
+O projeto inclui um **workflow de CI/CD (GitHub Actions)** que força a **verificação de estilo (Lint)** e uma **cobertura mínima de testes de 90%**.
 
-### 🧩 Feature 1: Rota GET  
+### Feature 1: Rota GET  
 **GET /api/filmes** - Retorna todos os filmes.  
 Implementada na branch: `feature/rota-get`
 
-### 🧩 Feature 2: Rota POST  
+### Feature 2: Rota POST  
 **POST /api/filmes** - Adiciona um novo filme.  
 Implementada na branch: `feature/rota-post`
+
+### Feature 3: Rota DELETE  
+**DELETE /api/filmes/:id** - Remove um filme específico por ID.  
+Implementada na branch: `feature/rota-post`
+- Retorna **404** se o filme não for encontrado.  
+- Retorna **204** em caso de sucesso.  
+
+---
 
 ### 🧩 Feature 3: Rota DELETE  
 **DELETE /api/filmes/:id** - Remove um filme específico por ID.  
 - Retorna **404** se o filme não for encontrado.  
 - Retorna **204** em caso de sucesso.  
 
----
-
-## 🛠️ Como executar
-
-### 📋 Pré-requisitos
+### Pré-requisitos
 - [Node.js](https://nodejs.org/)
 - npm
 
-### ⚙️ Instalação e Execução
+### Instalação e Execução
 
 ```bash
 # Clone o repositório
@@ -48,9 +53,9 @@ npm run dev
 ```
 
 A API estará acessível em:
-👉 http://localhost:8080/api/filmes
+-> http://localhost:8080/api/filmes
 
-### 🧪 Executando Testes
+###  Executando Testes
 
 Este projeto usa Jest para testes e verificação de cobertura.
 ```bash
@@ -98,6 +103,6 @@ Merge para main: agora main tem GET + POST.
 
 feature/rota-delete: Desenvolve somente a rota DELETE e seus testes.
 
-ci/workflow: Adiciona o Lint e a cobertura mínima de 90%.
+eslint: Adiciona o Lint e a cobertura mínima de 90%.
 
 Merge para main: agora main tem a API completa e os workflows de qualidade.
