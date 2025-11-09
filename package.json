@@ -6,8 +6,9 @@
   "scripts": {
     "start": "node src/server.js",
     "dev": "nodemon src/server.js",
-    "test": "jest --runInBand"
-
+    "test": "jest --runInBand",
+    "test:coverage": "jest --runInBand --coverage",
+    "lint": "eslint ."
   },
   "keywords": [],
   "author": "Samara Porto",
@@ -17,10 +18,22 @@
     "express": "^5.1.0"
   },
   "devDependencies": {
+    "@eslint/js": "^9.39.1",
+    "eslint": "^9.39.1",
+    "eslint-plugin-jest": "^29.0.1",
+    "globals": "^16.5.0",
     "jest": "^30.2.0",
     "supertest": "^7.1.4"
   },
   "jest": {
-  "testEnvironment": "node"
-}
+    "testEnvironment": "node",
+    "coverageThreshold": {
+      "global": {
+        "branches": 90,
+        "functions": 90,
+        "lines": 90,
+        "statements": 90
+      }
+    }
+  }
 }

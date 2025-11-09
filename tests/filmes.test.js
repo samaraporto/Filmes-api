@@ -95,3 +95,39 @@ describe('DELETE /api/filmes/:id', () => {
     expect(response.body).toHaveProperty('error', 'ID inválido. Forneça um número.');
   });
 });
+
+
+describe('POST /api/filmes', () => {
+  it('deve criar um novo filme e retornar 201', async () => {
+    const novoFilme = {
+      titulo: 'Filme Novo Teste',
+      diretor: 'Diretor Teste',
+      ano: 2025
+    };
+
+    const response = await request(app)
+      .post('/api/filmes')
+      .send(novoFilme);
+
+    expect(response.statusCode).toBe(201);
+    expect(response.body).toHaveProperty('id');
+    expect(response.body.titulo).toBe('Filme Novo Teste');
+
+    const getRes = await request(app).get('/api/filmes');
+    expect(getRes.body.length).toBe(3); // 2 do mock + 1 novo
+  });
+
+  it('deve retornar 400 se faltar o título, diretor ou ano', async () => {
+    const filmeIncompleto = {
+      diretor: 'Diretor Teste',
+      ano: 2025
+    };
+
+    const response = await request(app)
+      .post('/api/filmes')
+      .send(filmeIncompleto);
+
+    expect(response.statusCode).toBe(400);
+    expect(response.body).toHaveProperty('error', 'Título, diretor e ano são obrigatórios');
+  });
+});
