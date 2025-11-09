@@ -1,56 +1,104 @@
-# API REST de Filmes
+# 🎬 API REST de Filmes
+
+Uma **API REST simples** para gerenciar um catálogo de filmes, criada como **atividade acadêmica**.  
+O projeto inclui um **workflow de CI/CD (GitHub Actions)** que força a **verificação de estilo (Lint)** e uma **cobertura mínima de testes de 90%**.
+
+---
 
 ## Funcionalidades Implementadas
 
-### Feature 1: Rota GET
-- `GET /api/filmes` - Retorna todos os filmes
-- Implementada na branch `feature/rota-get`
+### Feature 1: Rota GET  
+**GET /api/filmes** - Retorna todos os filmes.  
+Implementada na branch: `feature/rota-get`
 
 ### Feature 2: Rota POST  
-- `POST /api/filmes` - Adiciona novo filme
-- Implementada na branch `feature/rota-post`
+**POST /api/filmes** - Adiciona um novo filme.  
+Implementada na branch: `feature/rota-post`
 
-## Pré-requisitos
-Node.js
+### Feature 3: Rota DELETE  
+**DELETE /api/filmes/:id** - Remove um filme específico por ID.  
+Implementada na branch: `feature/rota-post`
+- Retorna **404** se o filme não for encontrado.  
+- Retorna **204** em caso de sucesso.  
 
-npm
+---
 
 ## Como executar
 
+### Pré-requisitos
+- [Node.js](https://nodejs.org/)
+- npm
+
+### Instalação e Execução
 
 ```bash
-
-# clone o repositório:
+# Clone o repositório
 git clone https://github.com/samaraporto/Filmes-api.git
 
+# Entre na pasta
 cd Filmes-api
 
-# instalar dependencias
+# Instalar dependências
 npm install
 
-# executar api
+# Executar API em modo de produção
 npm start
 
-# ou para desenvolvimento
+# Ou para desenvolvimento (com auto-reload)
 npm run dev
 ```
 
-acesse: http://localhost:8080/api/filmes
+A API estará acessível em:
+-> http://localhost:8080/api/filmes
+
+###  Executando Testes
+
+Este projeto usa Jest para testes e verificação de cobertura.
+```bash
+# Rodar os testes de unidade
+npm test
+
+# Rodar os testes e ver a cobertura de 90%
+npm run test:coverage
+
+# Rodar o linter para verificar o estilo do código
+npm run lint
+```
+
+### CI/CD (Qualidade de Código)
+
+Este projeto utiliza GitHub Actions (.github/workflows/ci.yml) para garantir a qualidade do código antes do merge para a branch main.
+
+O workflow é disparado em todo push ou pull_request para a main e executa dois jobs:
+
+verificar-estilo → Garante que o código segue os padrões do ESLint (npm run lint).
+
+verificar-cobertura → Garante que os testes de unidade cobrem no mínimo 90% do código (npm run test:coverage).
+
+A branch main é protegida e só permite o merge se ambos os jobs passarem 
 
 ## Por que GitHub Flow?
 
-* Simplicidade para projeto acadêmico
+Simplicidade: Perfeito para projetos acadêmicos e equipes pequenas.
 
-* Desenvolvimento incremental de features
+Desenvolvimento incremental: Foco em adicionar uma feature por vez.
 
-* Histórico limpo e compreensível
+Histórico limpo: A branch main sempre reflete o código em produção.
 
-* Ideal para APIs REST simples como a atividade proposta
+### Resumo do Fluxo Correto
 
-## RESUMO DO FLUXO CORRETO
+main inicial: Apenas estrutura do projeto.
 
-1. **main inicial**: Apenas estrutura do projeto
-2. **feature/rota-get**: Desenvolve SOMENTE a rota GET  
-3. **merge para main**: Agora main tem GET funcionando
-4. **feature/rota-post**: Desenvolve SOMENTE a rota POST
-5. **merge para main**: Agora main tem GET + POST funcionando
+feature/rota-get: Desenvolve somente a rota GET.
+
+Merge para main: agora main tem GET.
+
+feature/rota-post: Desenvolve somente a rota POST.
+
+Merge para main: agora main tem GET + POST.
+
+feature/rota-delete: Desenvolve somente a rota DELETE e seus testes.
+
+eslint: Adiciona o Lint e a cobertura mínima de 90%.
+
+Merge para main: agora main tem a API completa e os workflows de qualidade.
