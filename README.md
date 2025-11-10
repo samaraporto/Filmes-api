@@ -1,12 +1,9 @@
-# 🎬 API REST de Filmes
+# API REST de Filmes
 
-Uma **API REST simples** para gerenciar um catálogo de filmes, criada como **atividade acadêmica**.  
+Uma **API REST simples** para gerenciar um catálogo de filmes, criada como atividade acadêmica da disciplina Gestão de Configuração II.  
 O projeto inclui um **workflow de CI/CD (GitHub Actions)** que força a **verificação de estilo (Lint)** e uma **cobertura mínima de testes de 90%**.
 
 ---
-
-Uma **API REST simples** para gerenciar um catálogo de filmes, criada como **atividade acadêmica**.  
-O projeto inclui um **workflow de CI/CD (GitHub Actions)** que força a **verificação de estilo (Lint)** e uma **cobertura mínima de testes de 90%**.
 
 ### Feature 1: Rota GET  
 **GET /api/filmes** - Retorna todos os filmes.  
@@ -18,19 +15,15 @@ Implementada na branch: `feature/rota-post`
 
 ### Feature 3: Rota DELETE  
 **DELETE /api/filmes/:id** - Remove um filme específico por ID.  
-Implementada na branch: `feature/rota-post`
+Implementada na branch: `feature/rota-delete`
 - Retorna **404** se o filme não for encontrado.  
 - Retorna **204** em caso de sucesso.  
 
 ---
 
-### 🧩 Feature 3: Rota DELETE  
-**DELETE /api/filmes/:id** - Remove um filme específico por ID.  
-- Retorna **404** se o filme não for encontrado.  
-- Retorna **204** em caso de sucesso.  
 
 ### Pré-requisitos
-- [Node.js](https://nodejs.org/)
+- Node
 - npm
 
 ### Instalação e Execução
