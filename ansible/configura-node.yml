@@ -1,0 +1,68 @@
+---
+- name: Configurar servidor e instalar API
+  hosts: app_servers
+  become: true 
+  vars:
+    node_version: "18.x"
+    app_dir: "/var/www/api-indies"
+
+  tasks:
+    - name: Atualizar cache do apt (Ubuntu/Debian)
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
+      when: ansible_os_family == "Debian"
+
+    - name: Instalar dependências básicas (curl, git)
+      package:
+        name:
+          - curl
+          - git
+        state: present
+
+    - name: Adicionar repositório do Node.js {{ node_version }}
+      shell: "curl -fsSL https://deb.nodesource.com/setup_{{ node_version }} | bash -"
+      args:
+        creates: "/etc/apt/sources.list.d/nodesource.list"
+      when: ansible_os_family == "Debian"
+
+    - name: Instalar Node.js
+      apt:
+        name: nodejs
+        state: present
+      when: ansible_os_family == "Debian"
+
+    - name: Criar diretório da aplicação
+      file:
+        path: "{{ app_dir }}"
+        state: directory
+        mode: '0755'
+        owner: "{{ ansible_user_id }}"
+
+    - name: Copiar arquivos do projeto para o servidor
+      copy:
+        src: ../ 
+        dest: "{{ app_dir }}"
+        exclude:
+          - node_modules
+          - .git
+          - .github
+          - ansible
+
+    - name: Instalar dependências do projeto (npm install)
+      npm:
+        path: "{{ app_dir }}"
+        production: yes
+
+    - name: Instalar PM2 (para manter o app rodando)
+      npm:
+        name: pm2
+        global: yes
+        state: present
+
+    - name: Iniciar aplicação com PM2
+      command: pm2 start src/index.js --name "api-indies" --force
+      args:
+        chdir: "{{ app_dir }}"
+      environment:
+        PORT: 3000
