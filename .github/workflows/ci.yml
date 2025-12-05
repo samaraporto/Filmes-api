@@ -50,3 +50,5 @@ jobs:
 
       - name: Rodar testes e gerar cobertura
         run: npm test -- --coverage
+        env: 
+          MONGO_URI: ${{ secrets.MONGO_URI }}
