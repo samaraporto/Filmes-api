@@ -12,57 +12,77 @@ jobs:
   verificar-estilo:
     name: Verificação de Estilo (Lint)
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout do código
         uses: actions/checkout@v4
-
       - name: Instalar Node.js 22
         uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: 'npm' 
-
-      - name: Instalar dependências
-        run: npm install
-
-      - name: Rodar o Linter
-        run: npm run lint
+        with: { node-version: 22, cache: 'npm' }
+      - run: npm install
+      - run: npm run lint
 
   verificar-cobertura:
     name: Testes e Cobertura (>= 90%)
     runs-on: ubuntu-latest
-    
     needs: verificar-estilo
-
     steps:
       - name: Checkout do código
         uses: actions/checkout@v4
-
       - name: Instalar Node.js 22
         uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: 'npm'
-
-      - name: Instalar dependências
-        run: npm install
-
+        with: { node-version: 22, cache: 'npm' }
+      - run: npm install
       - name: Rodar testes e gerar cobertura
         run: npm test -- --coverage
         env: 
           MONGO_URI: ${{ secrets.MONGO_URI }}
 
-  docker:
+  # DOCKER (SEPARADA EM 2 JOBS) ---
+
+  # JOB 1: Construção da Imagem (Build)
+  build-docker:
+    name: Construção da Imagem
     needs: verificar-cobertura
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
     
     steps:
       - name: Checkout do código
         uses: actions/checkout@v4
+
+      - name: Configurar Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Construir Imagem (Local)
+        # cria a imagem e dá o nome 'filmes-api:artifact'
+        run: docker build -t filmes-api:artifact .
+
+      - name: Salvar Imagem em Arquivo
+        # transforma a imagem num arquivo físico para passar pro outro job
+        run: docker save filmes-api:artifact > image.tar
+
+      - name: Upload do Artefato
+        # sobe o arquivo para o GitHub temporariamente
+        uses: actions/upload-artifact@v4
+        with:
+          name: docker-image
+          path: image.tar
+          retention-days: 1
+
+  # JOB 2: Publicação da Imagem (Push)
+  push-docker:
+    name: Publicação no Docker Hub
+    needs: build-docker # só roda se o build funcionar
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Baixar Imagem (Artifact)
+        uses: actions/download-artifact@v4
+        with:
+          name: docker-image
+
+      - name: Carregar Imagem no Docker
+        # pega o arquivo baixado e restaura para o Docker
+        run: docker load < image.tar
 
       - name: Login no Docker Hub
         uses: docker/login-action@v3
@@ -70,14 +90,12 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Build and push
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          push: true
-          tags: |
-            ${{ secrets.DOCKER_USERNAME }}/filmes-api:latest
-            ${{ secrets.DOCKER_USERNAME }}/filmes-api:v${{ github.run_number }}
+      - name: Etiquetar e Publicar (Push)
+        run: |
+          # Pega a imagem 'filmes-api:artifact' e coloca as etiquetas oficiais
+          docker tag filmes-api:artifact ${{ secrets.DOCKER_USERNAME }}/filmes-api:latest
+          docker tag filmes-api:artifact ${{ secrets.DOCKER_USERNAME }}/filmes-api:v${{ github.run_number }}
+          
+          # Envia para a nuvem
+          docker push ${{ secrets.DOCKER_USERNAME }}/filmes-api:latest
+          docker push ${{ secrets.DOCKER_USERNAME }}/filmes-api:v${{ github.run_number }}
