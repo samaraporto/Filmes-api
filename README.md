@@ -1,10 +1,9 @@
 # API REST de Filmes
 
-![Build Status](https://github.com/samaraporto/Filmes-api/actions/workflows/ci.yml/badge.svg)
+![Docker Image Size](https://img.shields.io/docker/image-size/samaraporto/filmes-api/latest)
 
-![Docker Pulls](https://badgen.net/docker/pulls/samaraporto/filmes-api?icon=docker&label=pulls)
+![Docker Pulls](https://img.shields.io/docker/pulls/samaraporto/filmes-api)
 
-![Docker Image Size](https://badgen.net/docker/size/samaraporto/filmes-api?icon=docker&label=image%20size)
 
 [🐳 Acesse a Imagem oficial no Docker Hub](https://hub.docker.com/r/samaraporto/filmes-api)
 
