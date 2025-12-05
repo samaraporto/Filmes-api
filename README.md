@@ -1,5 +1,9 @@
 # API REST de Filmes
 
+![Docker Pulls](https://badgen.net/docker/pulls/samaraporto/filmes-api?icon=docker&label=pulls)
+
+[Acesse a Imagem no Docker Hub](https://hub.docker.com/r/SEU_USUARIO/filmes-api)
+
 Uma **API REST simples** para gerenciar um catálogo de filmes, criada como atividade acadêmica da disciplina Gestão de Configuração II.  
 O projeto inclui um **workflow de CI/CD (GitHub Actions)** que força a **verificação de estilo (Lint)** e uma **cobertura mínima de testes de 90%**.
 
