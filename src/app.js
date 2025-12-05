@@ -54,7 +54,7 @@ app.delete('/api/filmes/:id', async (req, res) => {
       return res.status(404).json({ error: 'Filme não encontrado' });
     }
     return res.status(204).send();
-  } catch (error) {
+  } catch {
     res.status(400).json({ error: 'ID inválido ou erro na operação' });
   }
 });
