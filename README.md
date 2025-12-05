@@ -1,8 +1,11 @@
 # API REST de Filmes
 
+![Build Status](https://github.com/samaraporto/Filmes-api/actions/workflows/main.yml/badge.svg)
 ![Docker Pulls](https://badgen.net/docker/pulls/samaraporto/filmes-api?icon=docker&label=pulls)
+![Docker Image Size](https://badgen.net/docker/size/samaraporto/filmes-api?icon=docker&label=image%20size)
 
-[Acesse a Imagem no Docker Hub](https://hub.docker.com/r/SEU_USUARIO/filmes-api)
+Esta é uma API REST para gerenciamento de filmes, integrada com MongoDB e Dockerizada.
+...
 
 Uma **API REST simples** para gerenciar um catálogo de filmes, criada como atividade acadêmica da disciplina Gestão de Configuração II.  
 O projeto inclui um **workflow de CI/CD (GitHub Actions)** que força a **verificação de estilo (Lint)** e uma **cobertura mínima de testes de 90%**.
