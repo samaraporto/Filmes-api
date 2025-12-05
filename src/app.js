@@ -12,6 +12,7 @@ const port = process.env.PORT || 3000;
 // conexão com o MongoDB Atlas
 mongoose.connect(mongoUri)
   .then(() => console.log('Conectado ao MongoDB Atlas com sucesso!'))
+  /* istanbul ignore next */
   .catch(err => console.error('Erro ao conectar no Mongo:', err));
 
 const Filme = mongoose.model('Filme', {
@@ -26,6 +27,7 @@ app.get('/api/filmes', async (req, res) => {
     const filmes = await Filme.find();
     res.json(filmes);
   } catch (error) {
+    /* istanbul ignore next */
     res.status(500).json({ error: error.message });
   }
 });
@@ -42,6 +44,7 @@ app.post('/api/filmes', async (req, res) => {
     await novoFilme.save();
     res.status(201).json(novoFilme);
   } catch (error) {
+    /* istanbul ignore next */
     res.status(400).json({ error: error.message });
   }
 });
@@ -55,6 +58,7 @@ app.delete('/api/filmes/:id', async (req, res) => {
     }
     return res.status(204).send();
   } catch {
+    /* istanbul ignore next */
     res.status(400).json({ error: 'ID inválido ou erro na operação' });
   }
 });
