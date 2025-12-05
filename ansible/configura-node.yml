@@ -1,10 +1,10 @@
 ---
-- name: Configurar servidor e instalar API
+- name: Configurar servidor e instalar API Filmes
   hosts: app_servers
   become: true 
   vars:
     node_version: "18.x"
-    app_dir: "/var/www/api-indies"
+    app_dir: "/var/www/filmes-api"
 
   tasks:
     - name: Atualizar cache do apt (Ubuntu/Debian)
@@ -48,6 +48,8 @@
           - .git
           - .github
           - ansible
+          - coverage
+          - tests
 
     - name: Instalar dependências do projeto (npm install)
       npm:
@@ -61,7 +63,7 @@
         state: present
 
     - name: Iniciar aplicação com PM2
-      command: pm2 start src/index.js --name "api-indies" --force
+      command: pm2 start src/server.js --name "filmes-api" --force
       args:
         chdir: "{{ app_dir }}"
       environment:
