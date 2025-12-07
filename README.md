@@ -2,13 +2,26 @@
 
 ![Docker Image Size](https://img.shields.io/docker/image-size/samaraporto/filmes-api/latest)
 
-![Docker Pulls](https://img.shields.io/docker/pulls/samaraporto/filmes-api)
+
+<p align="left">
+
+  <img src="https://img.shields.io/badge/Coverage-90%25-brightgreen" alt="Coverage">
+
+  <a href="https://hub.docker.com/r/samaraporto/filmes-api">
+    <img src="https://img.shields.io/docker/pulls/samaraporto/filmes-api" alt="Docker Pulls">
+  </a>
+
+  <a href="https://hub.docker.com/r/samaraporto/filmes-api">
+    <img src="https://img.shields.io/docker/v/samaraporto/filmes-api?sort=semver" alt="Docker Image Version">
+  </a>
+
+</p>
 
 
 [🐳 Acesse a Imagem oficial no Docker Hub](https://hub.docker.com/r/samaraporto/filmes-api)
 
 Esta é uma API REST para gerenciamento de filmes, integrada com MongoDB e Dockerizada.
-...
+
 
 Uma **API REST simples** para gerenciar um catálogo de filmes, criada como atividade acadêmica da disciplina Gestão de Configuração II.  
 O projeto inclui um **workflow de CI/CD (GitHub Actions)** que força a **verificação de estilo (Lint)** e uma **cobertura mínima de testes de 90%**.
@@ -72,40 +85,39 @@ npm run test:coverage
 npm run lint
 ```
 
-### CI/CD (Qualidade de Código)
+### CI/CD com GitHub Actions
 
-Este projeto utiliza GitHub Actions (.github/workflows/ci.yml) para garantir a qualidade do código antes do merge para a branch main.
+O workflow está em: .github/workflows/ci-cd.yaml
 
-O workflow é disparado em todo push ou pull_request para a main e executa dois jobs:
+Ele é executado a cada push na branch main e possui 4 jobs sequenciais:
 
-verificar-estilo → Garante que o código segue os padrões do ESLint (npm run lint).
+linter — Verifica estilo do código com ESLint
 
-verificar-cobertura → Garante que os testes de unidade cobrem no mínimo 90% do código (npm run test:coverage).
+test-and-coverage — Executa testes e valida 90% de cobertura
 
-A branch main é protegida e só permite o merge se ambos os jobs passarem 
+build-image — Constrói a imagem Docker da aplicação
 
-## Por que GitHub Flow?
+publish-image — Publica no Docker Hub
 
-Simplicidade: Perfeito para projetos acadêmicos e equipes pequenas.
+Repositório: samaraporto/filmes-api
 
-Desenvolvimento incremental: Foco em adicionar uma feature por vez.
+### Infraestrutura como Código (Ansible)
 
-Histórico limpo: A branch main sempre reflete o código em produção.
+Scripts localizados em: /ansible
 
-### Resumo do Fluxo Correto
+Principais arquivos:
 
-main inicial: Apenas estrutura do projeto.
+configura-node.yaml — Instala Node.js, copia arquivos, instala dependências e inicia com PM2
 
-feature/rota-get: Desenvolve somente a rota GET.
+hosts — Inventário de servidores (por padrão configurado para localhost)
 
-Merge para main: agora main tem GET.
+Como executar o provisionamento:
 
-feature/rota-post: Desenvolve somente a rota POST.
+```bash
+cd ansible
+ansible-playbook -i hosts configura-node.yaml -K
+```
 
-Merge para main: agora main tem GET + POST.
+![ansible](./imgs/ansible.png)
 
-feature/rota-delete: Desenvolve somente a rota DELETE e seus testes.
-
-eslint: Adiciona o Lint e a cobertura mínima de 90%.
-
-Merge para main: agora main tem a API completa e os workflows de qualidade.
+![resultado](./imgs/image.png)
