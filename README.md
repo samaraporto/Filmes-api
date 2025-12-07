@@ -117,3 +117,7 @@ Como executar o provisionamento:
 cd ansible
 ansible-playbook -i hosts configura-node.yaml -K
 ```
+
+![ansible](./imgs/ansible.png)
+
+![resultado](./imgs/image.png)
