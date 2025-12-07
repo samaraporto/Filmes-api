@@ -13,11 +13,12 @@
         cache_valid_time: 3600
       when: ansible_os_family == "Debian"
 
-    - name: Instalar dependências básicas (curl, git)
+    - name: Instalar dependências básicas (curl, git, rsync)
       package:
         name:
           - curl
           - git
+          - rsync
         state: present
 
     - name: Adicionar repositório do Node.js {{ node_version }}
@@ -39,24 +40,38 @@
         mode: '0755'
         owner: "{{ ansible_user_id }}"
 
-    - name: Copiar arquivos do projeto para o servidor
-      copy:
-        src: ../ 
-        dest: "{{ app_dir }}"
-        exclude:
-          - node_modules
-          - .git
-          - .github
-          - ansible
-          - coverage
-          - tests
+    # ALTERAÇÃO IMPORTANTE: Usando rsync via shell para garantir que os arquivos
+    # sejam copiados para a raiz da pasta, e não criar uma subpasta.
+    # O "strip-components=1" não se aplica aqui, mas o rsync com "*" sim.
+    - name: Sincronizar arquivos (Forçando via Shell)
+      shell: >
+        rsync -av 
+        --exclude='node_modules' 
+        --exclude='.git' 
+        --exclude='.github' 
+        --exclude='ansible' 
+        --exclude='coverage'
+        --exclude='tests'
+        "{{ playbook_dir }}/../" "{{ app_dir }}/"
+      # O / no final de app_dir/ é importante!
+
+    # DEBUG: Confirma se o package.json chegou no lugar certo
+    - name: Verificar se package.json existe
+      stat:
+        path: "{{ app_dir }}/package.json"
+      register: pjson
+
+    - name: Falhar se o arquivo não estiver lá (Debug)
+      fail:
+        msg: "ERRO: O package.json não foi copiado para {{ app_dir }}. Verifique os caminhos."
+      when: not pjson.stat.exists
 
     - name: Instalar dependências do projeto (npm install)
       npm:
         path: "{{ app_dir }}"
         production: yes
 
-    - name: Instalar PM2 (para manter o app rodando)
+    - name: Instalar PM2 Globalmente
       npm:
         name: pm2
         global: yes

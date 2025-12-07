@@ -1,3 +1,2 @@
 [app_servers]
-192.168.0.18
-192.168.0.19
+localhost ansible_connection=local
